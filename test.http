@@ -1,0 +1,9 @@
+
+
+URL : http://localhost:3001/api/verifiers/add-revenue
+Content-Type: application/json
+
+{
+  "verifier": "0x123456789abcdef123456789abcdef1234567890",
+  "amount": 1000
+}

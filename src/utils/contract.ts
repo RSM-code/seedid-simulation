@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const provider = new ethers.JsonRpcProvider(
-  process.env.PROVIDER_URL || "http://127.0.0.1:8545"
-);
+  const provider = new ethers.providers.JsonRpcProvider(
+    "http://127.0.0.1:8545"
+  );
 const contractAddress =
   process.env.CONTRACT_ADDRESS || "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 

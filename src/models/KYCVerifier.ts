@@ -16,4 +16,9 @@ const KYCVerifierSchema: Schema = new Schema({
   validationsCount: { type: Number, default: 0 },
 });
 
-export default mongoose.model<IKYCVerifier>("KYCVerifier", KYCVerifierSchema);
+const KYCVerifier = mongoose.model<IKYCVerifier>(
+  "KYCVerifier",
+  KYCVerifierSchema
+);
+
+export default KYCVerifier;

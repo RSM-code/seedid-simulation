@@ -1,33 +1,43 @@
 import { Request, Response } from "express";
-import {
-  getVerifiers,
-  addVerifier,
-} from "@/controllers/verifierController";
-import KYCVerifier from "@/models/KYCVerifier";
+import KYCVerifier from "../models/KYCVerifier"; // Modèle Mongoose des vérificateurs
 
-jest.mock("@/models/KYCVerifier"); // Mock de KYCVerifier
+/**
+ * Récupère tous les vérificateurs
+ */
+export const getVerifiers = async (req: Request, res: Response) => {
+  try {
+    const verifiers = await KYCVerifier.find();
+    res.status(200).json(verifiers);
+  } catch (error) {
+    console.error("Error fetching verifiers:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
-describe("Verifier Controller", () => {
-  it("should fetch all verifiers", async () => {
-    const mockVerifiers = [
-      {
-        address: "0x123",
-        verifierType: "bank",
-        reputation: 0,
-        validationsCount: 0,
-      },
-    ];
-    (KYCVerifier.find as jest.Mock).mockResolvedValue(mockVerifiers);
+/**
+ * Ajoute un nouveau vérificateur
+ */
+export const addVerifier = async (req: Request, res: Response) => {
+  const { address, verifierType } = req.body;
 
-    const req = {} as Request;
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    } as unknown as Response;
+  if (!address || !verifierType) {
+    return res
+      .status(400)
+      .json({ error: "Missing required fields: address, verifierType" });
+  }
 
-    await getVerifiers(req, res);
+  try {
+    const newVerifier = new KYCVerifier({
+      address,
+      verifierType,
+      reputation: 0, // Par défaut
+      validationsCount: 0, // Par défaut
+    });
 
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(mockVerifiers);
-  });
-});
+    await newVerifier.save();
+    res.status(201).json(newVerifier);
+  } catch (error) {
+    console.error("Error adding verifier:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

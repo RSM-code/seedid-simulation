@@ -1,11 +1,16 @@
 import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
+import "@nomiclabs/hardhat-ethers";
+import "@nomiclabs/hardhat-waffle";
+import "@nomiclabs/hardhat-etherscan";
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.27",
-  networks: {
-    localhost: {
-      url: "http://127.0.0.1:8545",
+  solidity: {
+    version: "0.8.27",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
     },
   },
 };
